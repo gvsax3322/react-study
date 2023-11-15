@@ -152,7 +152,7 @@ export default Heading;
 import Heading from "./Heading";
 ```
 
--전체코드
+-전체코드!
 
 ```js
 import React from "react";
