@@ -1,12 +1,10 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-
-// 컴포넌트명.module.css 라서
-import styles from "../styles/Main.module.css";
+import "../scss/main.css";
 
 const Main = () => {
   return (
-    <div className={styles.wrap}>
+    <div className="wrap">
       {/* 상단 내용 고정 */}
       <Header>
         <a href="#!">로고</a>
