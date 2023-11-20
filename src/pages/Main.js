@@ -2,6 +2,7 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import "../scss/main.css";
 import { WrapCss } from "../styles/sample";
+import { ComunitySection, SlideSection } from "../styles/tag";
 
 const Main = () => {
   return (
@@ -84,10 +85,10 @@ const Main = () => {
       </Header>
       {/* 내용은 자주 변함 */}
       <main className="main">
-        <section className="slide">
+        <SlideSection bg="yellow" h={200}>
           <div>이미지슬라이드</div>
-        </section>
-        <section className="community">
+        </SlideSection>
+        <ComunitySection>
           <div className="inner">
             <div className="community-notice">
               <div>공지사항</div>
@@ -96,7 +97,7 @@ const Main = () => {
             <div className="community-banner">배너</div>
             <div className="community-link">바로가기</div>
           </div>
-        </section>
+        </ComunitySection>
       </main>
       {/* 하단 고정 */}
       <Footer>
