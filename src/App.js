@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import styled from "@emotion/styled";
 import Title from "./components/Title";
 import Input from "./components/Input";
@@ -23,7 +23,12 @@ const App = () => {
   };
   const showTodoTxt = title => {
     alert(`전달받은 제목은 ${title} 입니다.`);
+    const newData = [...data];
+    newData.push(title);
+    setData(newData);
   };
+  const [data, setData] = useState([]);
+
   return (
     <TodoApp>
       <Title
@@ -37,7 +42,7 @@ const App = () => {
         오늘 할일 샘플
       </Title>
       <Input showTodoTxt={showTodoTxt} />
-      <List />
+      <List data={data} />
     </TodoApp>
   );
 };
