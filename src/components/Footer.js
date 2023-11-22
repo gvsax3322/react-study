@@ -1,6 +1,7 @@
-const Footer = (props) => {
-  //js코드자리
-  return <footer>{props.children}</footer>;
+import React from "react";
+
+const Footer = () => {
+  return <footer>하단</footer>;
 };
 
 export default Footer;
