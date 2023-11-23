@@ -1,11 +1,17 @@
 import React from "react";
-
-const Header = ({ children, version }) => {
+import { Link } from "react-router-dom";
+const Header = () => {
   return (
-    <header>
-      {children}
-      {version}
-    </header>
+    <div>
+      <h1 style={{ textAlign: "center" }}>Header</h1>
+      <div style={{ background: "skyblue", textAlign: "center", fontSize: 20 }}>
+        <Link to="/home">Home</Link>|<Link to="/members">Members</Link>|
+        <Link to="/about">About</Link>|
+        <a href="http://www.naver.com" target="_blank">
+          네이버
+        </a>
+      </div>
+    </div>
   );
 };
 
