@@ -18,7 +18,7 @@ const MembersDetail = ({ member }) => {
   //   });
   //   const findData3 = member.find(item => item.name === id);
 
-  console.log(findData);
+  // console.log(findData);
 
   return (
     <div>
