@@ -16,6 +16,7 @@
 
 - App.js
   : 반드시 API 의 common props 체크해 보자.
+  sssst
 
 ```js
 import React from "react";
