@@ -1,22 +1,3 @@
-# React
-
-## Calendar 활용해보기
-
-- [Ant.design](https://ant.design/components/calendar)
-- [React-calendar](https://www.npmjs.com/package/react-calendar)
-- [FullCalendar](https://fullcalendar.io/)
-- [Toast UI](https://ui.toast.com/tui-calendar)
-
-### AntDesign 캘린더 활용하기
-
-#### 1. 설치
-
-- `npm install antd --save`
-- `npm install @ant-design/icons --save`
-- moment : `npm install moment --save`
-- dayjs : `npm install dayjs`
-
-```js
 import React, { useState } from "react";
 import { Modal, Calendar } from "antd";
 // 외부 데이터 가져오기
@@ -119,10 +100,10 @@ const Schedule = () => {
             <span>{item.todoTitle}</span>
             {/* 이미지가 있을지 아닐지 몰라 */}
             {/* {item.todoPic ? (
-                <img src={item.todoPic} alt="" style={{ width: "100%" }} />
-                ) : (
-                ""
-                )} */}
+              <img src={item.todoPic} alt="" style={{ width: "100%" }} />
+            ) : (
+              ""
+            )} */}
           </li>
         ))}
       </ul>
@@ -163,4 +144,3 @@ const Schedule = () => {
 };
 
 export default Schedule;
-```
