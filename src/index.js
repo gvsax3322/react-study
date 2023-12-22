@@ -5,6 +5,7 @@ import "./styles/normalize.css";
 // index.css 파일 배치
 import "./styles/index.css";
 import Schedule from "./pages/schedule/Schedule";
+import Slide from "./pages/slide/Slide";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<Schedule />);
+root.render(<Slide />);
