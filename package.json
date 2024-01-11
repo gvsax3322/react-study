@@ -57,8 +57,5 @@
     "eslint-plugin-react": "^7.33.2",
     "sass": "^1.69.5"
   },
-  "main": ".eslintrc.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "proxy": "http://192.168.0.66:8080"
 }

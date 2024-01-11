@@ -1,8 +1,13 @@
 import React from "react";
-import BasicLayout from "../../layouts/BasicLayout";
+import AddComponent from "../../components/todo/AddComponent";
 
 const AddPage = () => {
-  return <h1>AddPagee</h1>;
+  return (
+    <div>
+      <h1>AddPagee</h1>
+      <AddComponent />
+    </div>
+  );
 };
 
 export default AddPage;
