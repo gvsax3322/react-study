@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { getList } from "../../api/todoApi";
-import useCustomMove from "../../hooks/useCustomMove";
 import PageComponent from "../common/PageComponent";
+import useCustomMove from "../../hooks/useCustomMove";
 
 // 서버 데이터 초기값 객체
 const initState = {
@@ -22,7 +27,7 @@ const ListComponent = () => {
   const [serverData, setServerData] = useState(initState);
 
   useEffect(() => {
-    getList({ page, size })
+    getList({page, size})
       .then(result => {
         // console.log("결과", result);
         setServerData(result);
@@ -39,7 +44,7 @@ const ListComponent = () => {
 
       <div>
         {serverData.dtoList.map(item => (
-          <div key={item.tno} style={{ cursor: "pointer" }}>
+          <div key={item.tno}>
             <div
               onClick={() => {
                 moveToRead(item.tno);

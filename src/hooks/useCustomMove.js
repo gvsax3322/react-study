@@ -52,6 +52,7 @@ const useCustomMove = () => {
     navigate({ pathname: `../modify/${num}`, search: queryStrDefault });
   };
 
+  // 상세 내용 보기
   const moveToRead = num => {
     navigate({ pathname: `../read/${num}`, search: queryStrDefault });
   };

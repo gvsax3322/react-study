@@ -39,15 +39,15 @@ const AddComponent = () => {
   };
 
   const { moveToList } = useCustomMove();
-
   // 팝업창 닫을 경우 실행할 함수
   const closeModal = () => {
+    // 팝업창 숨기기
     setResult(false);
     if (popRedrect === 0) {
+      // 목록가기
       moveToList();
-      //
     } else {
-      //
+      // 고대로 있어
     }
   };
 

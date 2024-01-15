@@ -1,18 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
 const BasicMenu = () => {
   return (
     <nav>
       <ul>
         <li>
-          <Link to="/">홈</Link>
+          <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/about">소개</Link>
+          <Link to="/about">About</Link>
         </li>
         <li>
-          <Link to="/todo">할일</Link>
+          <Link to="/todo/">Todo</Link>
+        </li>
+        <li>
+          <Link to="/product/">Product</Link>
         </li>
       </ul>
     </nav>

@@ -65,7 +65,7 @@ export const postAdd = async ({ todo, successFn, failFn, errFn }) => {
 export const putOne = async ({ todo, successFn, failFn, errFn }) => {
   try {
     const { tno } = todo;
-    const res = await axios.put(`${prefix}/`, { ...todo });
+    const res = await axios.put(`${prefix}/${tno}`, { ...todo });
     const status = res.status.toString();
     if (status.charAt(0) === "2") {
       successFn(res.data);

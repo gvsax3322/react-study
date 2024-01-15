@@ -15,7 +15,7 @@ const ResultModal = ({ title, content, callFN }) => {
   };
   return (
     <div style={popstyle}>
-      <div style={{ background: "#fff" }}>
+      <div style={{ background: "#fff", textAlign: "center" }}>
         <div>{title}</div>
         <div>{content}</div>
         <div>

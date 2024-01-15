@@ -106,6 +106,7 @@ const ModifyComponent = ({ tno }) => {
   const [result, setResult] = useState(false);
 
   const { moveToList, moveToRead } = useCustomMove();
+
   // 0 이면  1 이면 창닫기
   const closeModal = () => {
     setResult(false);
@@ -113,6 +114,7 @@ const ModifyComponent = ({ tno }) => {
       // 목록으로 : 페이지 상태 유지하면서 이동
       moveToList({ page: 1 });
     } else if (reDirect === 2) {
+      // 읽기로 페이지 이동한다.
       moveToRead(tno);
     }
   };
