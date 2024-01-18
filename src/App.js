@@ -24,6 +24,10 @@ const LazyProductReadPage = lazy(() =>
 const LazyProductModifyPage = lazy(() =>
   import("./pages/products/ProductModifyPage"),
 );
+// 회원기능
+const MemberPage = lazy(() => import("./pages/members/MemberPage"));
+const LoginPage = lazy(() => import("./pages/members/LoginPage"));
+const LogoutPage = lazy(() => import("./pages/members/LogoutPage"));
 
 const App = () => {
   return (
@@ -144,6 +148,38 @@ const App = () => {
           ></Route>
         </Route>
         {/* ---End product */}
+        {/* ---Start Member */}
+        <Route
+          path="/member/"
+          element={
+            <Suspense fallback={<Loading />}>
+              <MemberPage />
+            </Suspense>
+          }
+        >
+          {/* 첫페이지 리다이렉트 */}
+          {/* 최초 페이지 */}
+          <Route index element={<Navigate to="login" />}></Route>
+
+          <Route
+            path="login"
+            element={
+              <Suspense fallback={<Loading />}>
+                <LoginPage />
+              </Suspense>
+            }
+          />
+          {/* 로그아웃 */}
+          <Route
+            path="logout"
+            element={
+              <Suspense fallback={<Loading />}>
+                <LogoutPage />
+              </Suspense>
+            }
+          />
+        </Route>
+        {/* ---End Member */}
         <Route path="*" element={<h1>페이지가 없어요</h1>}></Route>
       </Routes>
     </BrowserRouter>
