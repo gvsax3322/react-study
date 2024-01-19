@@ -1,15 +1,14 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { logout } from "../../slices/loginSlice";
-import { useNavigate } from "react-router";
+import useCustomLogin from "../../hooks/useCustomLogin";
 
 const LogoutPage = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const { moveToPath, doLogout } = useCustomLogin();
   const handleClick = () => {
-    dispatch(logout());
-    navigate(-1);
+    doLogout();
+    moveToPath("/member/login");
   };
+
   return (
     <div>
       <h2>로그아웃하시겠습니까?</h2>
