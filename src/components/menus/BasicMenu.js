@@ -17,6 +17,9 @@ const BasicMenu = () => {
         <li>
           <Link to="/about">About</Link>
         </li>
+        <li>
+          <Link to="/form">Form</Link>
+        </li>
         {/* 로그인 상태 체크 후 내용 출력 */}
         {isLogin ? (
           <>
