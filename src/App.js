@@ -30,6 +30,7 @@ const LoginPage = lazy(() => import("./pages/members/LoginPage"));
 const LogoutPage = lazy(() => import("./pages/members/LogoutPage"));
 // Form 페이지
 const LazyFormPage = lazy(() => import("./pages/forms/FormPage"));
+const LazyMapPage = lazy(() => import("./pages/map/MapPage"));
 
 const App = () => {
   return (
@@ -188,6 +189,14 @@ const App = () => {
           element={
             <Suspense fallback={<Loading />}>
               <LazyFormPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/map"
+          element={
+            <Suspense fallback={<Loading />}>
+              <LazyMapPage />
             </Suspense>
           }
         />
