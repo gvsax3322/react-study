@@ -300,18 +300,37 @@ const FormComponent = () => {
     input.setAttribute("type", "file");
     input.setAttribute("accept", "image/*");
     input.click(); // 강제클릭
-
     // 이미지 선택을 한다면 처리를 진행한다.
     input.addEventListener("change", () => {
       // console.log("파일체인지");
-      // 일반적인 파일 처리과정을 진행한다.
-      const file = input.files[0];
-      console.log(file);
-      const formData = new FormData();
-      formData.append("img", file);
-      // 백엔드 이미지 서버로 전송해서 이미지 경로 받아야 합니다.
       try {
+        // 일반적인 파일 처리과정을 진행한다.
+
+        // 백엔드 이미지 서버로 전송해서 이미지 경로 받아야 합니다.
+        // 1. 화면에 이미지를 보여주기 전에
+        // 2. 백엔드로 이미지를 전송한다.
+        // 3. 전송이 완료되면 결과를 리턴 받는다.
+        // 4. 결과에는 무엇이 담겨지는가 하면
+        // 5. 이미지의 경로와 이미지의 파일명이 문자열로 들어온다.
+
+        const file = input.files[0];
+        // console.log(file);
+        const formData = new FormData();
+        formData.append("pics", file);
+        const header = { headers: { "Content-Type": "multipart/form-data" } };
+        const res = jwtAxios.post("백엔드와 협의한 주소", formData, header);
+        // const res = jwtAxios.post(`/api/board/image-upload?iboard=${newIBoard}`,, formData, header);
+        // res.data ====> /board/1048/e75629d1-3e06-496a-86f4-11da4a38a4b5.png
+        // 서버주소 : http://192.168.0.144:5223/pic
+        const imgUrl = "서버주소" + res.data;
         console.log("서버로 이미지 전송 axio 실행");
+        // 에디터에 이미지 배치하기
+        // 현재 에디터에 마우스 커서가 깜빡거리는 위치를 알아낸다.
+        const range = editor.getSelection();
+        // html 태그 img 생성한다. 그리고, 추가한다.
+        editor.insertEmbed(range.index, "image", imgUrl);
+        // 강제로 마우스 커서 위치를 다음으로 이동한다.
+        editor.setSelection(range.index + 1);
       } catch (err) {
         console.log("err");
       }
@@ -400,3 +419,7 @@ const FormComponent = () => {
 
 export default FormComponent;
 ```
+
+## 7. 백엔드에서 URL 받은 이후 처리
+
+- Editor 안쪽에 배치하기
