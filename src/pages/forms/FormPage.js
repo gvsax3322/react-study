@@ -5,7 +5,7 @@ import FormComponent from "../../components/forms/FormComponent";
 const FormPage = () => {
   return (
     <BasicLayout>
-      <h1>Form</h1>
+      <h1>FormPage</h1>
       <FormComponent />
     </BasicLayout>
   );

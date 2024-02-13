@@ -99,7 +99,7 @@ const AddComponent = () => {
         <ResultModal
           title={popTitle}
           content={popContent}
-          callFN={closeModal}
+          callFn={closeModal}
         />
       ) : null}
     </div>

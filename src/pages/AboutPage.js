@@ -7,6 +7,7 @@ const AboutPage = () => {
   if (!isLogin) {
     moveToLogin();
   }
+
   return (
     <BasicLayout>
       <h1>AboutPage</h1>

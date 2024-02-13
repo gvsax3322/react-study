@@ -126,7 +126,7 @@ const ModifyComponent = ({ tno }) => {
         <ResultModal
           title={popTitle}
           content={popContent}
-          callFN={closeModal}
+          callFn={closeModal}
         />
       ) : null}
 

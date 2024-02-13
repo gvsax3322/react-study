@@ -164,6 +164,7 @@ const ProductModifyComponent = ({ pno }) => {
   const [popContent, setPopContent] = useState("");
   const [result, setResult] = useState(0);
 
+  //   커스텀 훅 활용
   const { moveToList, moveToRead, page, size } = useCustomMove();
 
   const closeModal = () => {

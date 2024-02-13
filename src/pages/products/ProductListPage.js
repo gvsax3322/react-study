@@ -4,7 +4,7 @@ import ProductListComponent from "../../components/product/ProductListComponent"
 const ProductListPage = () => {
   return (
     <div>
-      <h1>상품목록</h1>
+      <h1>제품목록</h1>
       <ProductListComponent />
     </div>
   );

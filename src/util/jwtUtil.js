@@ -73,9 +73,9 @@ const beforeRes = async res => {
       memberInfo.refreshToken,
     );
     console.log("8. 요청 이후 되돌아와서 새로운 정보로 쿠키를 업데이트 ");
-    (memberInfo.accessToken = result.accessToken),
-      (memberInfo.refreshToken = result.refreshToken),
-      setCookie("member", JSON.stringify(memberInfo));
+    memberInfo.accessToken = result.accessToken;
+    memberInfo.refreshToken = result.refreshToken;
+    setCookie("member", JSON.stringify(memberInfo));
 
     console.log("9. 데이터 요청하던 API 재 요청");
     const originalRequest = res.config;

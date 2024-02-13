@@ -40,6 +40,7 @@ const useCustomLogin = () => {
 
   // 로그인 페이동 기능
   const moveToLogin = () => {
+    console.log("페이지 이동");
     return <Navigate replace to="/member/login" />;
   };
 

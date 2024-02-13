@@ -1,3 +1,4 @@
+import axios from "axios";
 import { API_SERVER_HOST } from "./todoApi";
 import jwtAxios from "../util/jwtUtil";
 
@@ -43,22 +44,22 @@ export const getList = async ({ param, successFn, failFn, errorFn }) => {
 export const getOne = async ({ pno, successFn, failFn, errorFn }) => {
   try {
     const res = await jwtAxios.get(`${host}/${pno}`);
-
     const status = res.status.toString();
     if (status.charAt(0) === "2") {
       successFn(res.data);
     } else {
-      failFn("목록 호출 오류입니다.");
+      failFn("상세정보 호출 오류입니다.");
     }
   } catch (error) {
-    errorFn("목록 호출 서버 에러에요");
+    errorFn("상세정보 호출 서버 에러에요");
   }
 };
 
+// 제품 수정하기
 export const putOne = async ({ pno, product, successFn, failFn, errorFn }) => {
   try {
-    // 파일 업로드시 준비할 것이 있습니다.
-    // 반드시 복수형으로 { headers } 작성 필요
+    // 여기서도 이미지가 추가될 수 있어요.
+    // header 가 필요합니다.
     const header = { headers: { "Content-Type": "multipart/form-data" } };
     const res = await jwtAxios.put(`${host}/${pno}`, product, header);
 
@@ -66,10 +67,10 @@ export const putOne = async ({ pno, product, successFn, failFn, errorFn }) => {
     if (status.charAt(0) === "2") {
       successFn(res.data);
     } else {
-      failFn("전송 오류입니다.");
+      failFn("상세정보 호출 오류입니다.");
     }
   } catch (error) {
-    errorFn("서버에러에요");
+    errorFn(error);
   }
 };
 
@@ -84,7 +85,7 @@ export const deleteOne = async ({ pno, successFn, failFn, errorFn }) => {
     if (status.charAt(0) === "2") {
       successFn(res.data);
     } else {
-      failFn("제품 삭제 호출 오류입니다.");
+      failFn("제품삭제 호출 오류입니다.");
     }
   } catch (error) {
     errorFn(error);
