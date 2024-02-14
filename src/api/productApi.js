@@ -45,13 +45,9 @@ export const getOne = async ({ pno, successFn, failFn, errorFn }) => {
   try {
     const res = await jwtAxios.get(`${host}/${pno}`);
     const status = res.status.toString();
-    if (status.charAt(0) === "2") {
-      successFn(res.data);
-    } else {
-      failFn("상세정보 호출 오류입니다.");
-    }
+    return res.data;
   } catch (error) {
-    errorFn("상세정보 호출 서버 에러에요");
+    console.log("상세정보 호출 서버 에러에요");
   }
 };
 
