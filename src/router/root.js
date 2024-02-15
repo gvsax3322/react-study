@@ -5,8 +5,9 @@ import { createBrowserRouter } from "react-router-dom";
 import Loading from "../components/loading/Loading";
 import { Suspense, lazy } from "react";
 import todoRouter from "./todoRouter";
-import productRouter from "./productRoter";
+import productRouter from "./productRouter";
 import memberRouter from "./memberRouter";
+import Main from "../pages/redux/Main";
 
 // 메인패스 컴포넌트
 const LazyMainPage = lazy(() => import("../pages/MainPage"));
@@ -18,6 +19,10 @@ const LazyFormPage = lazy(() => import("../pages/forms/FormPage"));
 const LazyMapPage = lazy(() => import("../pages/map/MapPage"));
 
 const router = createBrowserRouter([
+  {
+    path: "/rd",
+    element: <Main />,
+  },
   {
     path: "/",
     element: (

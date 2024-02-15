@@ -37,7 +37,7 @@ const CartItemComponent = ({
       </div>
       <div>
         <div>
-          <button onClick={() => handleClickQty(0)}>삭제</button>
+          <button onClick={() => handleClickQty(-qty)}>삭제</button>
         </div>
         <p>총 구매가격 : {qty * price} 원</p>
       </div>
