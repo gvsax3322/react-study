@@ -731,6 +731,12 @@ console.log(pair2); // { first: 'hello', second: true }
 
 ### 4.5. 제네릭에 제한 걸기
 
+- 제네릭이 참 좋은 데 너무 자유롭다.
+- 의도하지 않은 타입이 들어올 소지가 높다.
+- 그래서 들어올 수 있는 타입을 지정 : 제네릭 제약해보자
+- 개발자가 의도하지 않은 타입이 들어것을 막아보자
+- extends 주의하자. : 확장(상속) 과는 상관이 없어요.
+
 : extends 및 union 을 활용
 
 ```ts
@@ -749,4 +755,678 @@ const pair2: Pair<string> = { first: "a" };
 
 // 제약 조건에 의해 오류로 인식
 const pair3: Pair<boolean> = { first: true };
+// interface Pair {
+//   first: boolean; // extends 타입이 아니어서 오류
+// }
 ```
+
+: keyof 를 활용한 제네릭 타입 제한
+
+- key 는 속성명 (일반적으로 문자열)
+- keyof 는 키명을 추출해서 유니온(|) 타입으로 변환
+
+```ts
+type Person = keyof {
+  nickName: string;
+  age: number;
+};
+// type Person = "nickName" | "age"
+```
+
+```ts
+// 제네릭 생성
+function showKey<T extends keyof { nickName: string; age: number }>(value: T) {
+  console.log(value);
+}
+// function showKey<"nickName" | "age">(value: "nickName" | "age"): void
+
+// nickName 이라는 문자열만 받겠다.
+showKey("nickName");
+// age 이라는 문자열만 받겠다.
+showKey("age");
+
+showKey(100); // 오류  "nickName" | "age"
+showKey(true); // 오류 "nickName" | "age"
+```
+
+## 5. type assertion (타입 덮어쓰기)
+
+- 타입 추론 을 우선시 한다.
+
+```ts
+// 에디터가 타입을 추론합니다. (우선시)
+let age = 10;
+// 추론에 의한 코드 결과를 추천합니다.
+let age: number = 10;
+```
+
+- 타입 덮어쓰기는 타입 추론을 제거하고 개발자가 타입을 정한다.
+- 조금씩 js 에서 ts 로 바꾸어 갈 때 활용한다.
+- 타입 덮어쓰기에 활용한 키워드는 as 입니다.
+- as 를 사용하면 vscode 가 타입 검사를 안합니다.
+
+```ts
+// 타입추론을 막고 타입을 강제로 지정(개발자)
+let age = 10 as number;
+```
+
+- 아래 코드는 추론이 됩니다.
+
+```ts
+// 아래처럼 만약 진행시 Person 인터페이스와는 상관이 없다.
+// 아래처럼 진행하면 새로운 타입이 추론이 되어서 만들어진다.
+let hong = { nickName: "hong", age: 10 };
+// 추론의 결과
+// let hong: {
+//   nickName: string;
+//   age: number;
+// } = { nickName: "hong", age: 10 };
+```
+
+- 아래 코드는 타입 추론에 의해서 오류
+
+```ts
+let hong = {}; // 객체 리터럴
+// 타입 추론의 결과
+// let hong: {}
+
+// 아래 코드 오류
+hong.nickName = "hong";
+hong.age = 10;
+```
+
+- as 를 활용한 타입 선언
+
+```ts
+interface Person {
+  nickName: string;
+  age: number;
+}
+// let hong = {}; 객체 리터럴 타입 추론
+
+// 개발자가 안내
+let hong = {} as Person; // 타입 추론 제외
+// 타이 추론의 결과
+// let hong: Person
+
+// 아래 코드 정상
+hong.nickName = "hong";
+hong.age = 10;
+```
+
+- as 의 다양한 케이스
+
+```ts
+// 타입추론에선 id 가 any 라고 판단하면서
+// 정확하게 지정해 달라고 오류를 안내함.
+// 리턴도 안내를 해줘야겠다.
+function getId(id: any) {
+  return id;
+}
+// 타입 추론의 결과는 any 가 설정
+// const myId = getId("aaa") ;
+// 개발자가 원하는 리턴 결과는 문자열이다.
+const myId = getId("aaa") as string;
+```
+
+- 중첩 가능 (as 를 여러번 사용/거의없다)
+
+```ts
+const count = 10;
+// const count:10 = 10;
+
+let total = 10;
+// let total: number = 10;
+
+// as 는 타입 추론을 강제한다.
+let value = 10 as any as number;
+// let total: any = 10;
+// let total: number = 10;
+```
+
+- 주의사항
+  : 남용하지 마셔야 해요. (타입 추론이 우선!!!)
+  : 호환되지 않는 타입으로는 불가합니다.
+
+```ts
+// 타입 오류발생
+// as 가 강제할거야 라는 기대로 문자열 변경 시도
+// 오류 발생
+let value = 10 as string;
+// 문자열로 변경시 아래를 써야 된다.
+let str = value.toString();
+```
+
+- 참고 하면 좋을 내용.
+  : null 이 아니다 지정(보장한다.)
+  ```ts
+  function showResult(data: string) {
+    return data.length;
+  }
+  // ts 에서 체크 합니다.
+  // js 에서는 통과
+  showResult();
+  ```
+  : 해결시도 1
+  ```ts
+  function showResult(data: string | null) {
+    if (data === null || data === undefined) {
+      return;
+    }
+    return data.length;
+  }
+  ```
+  : 해결시도 2 (! 문법)
+  ```ts
+  function showResult(data: string | null) {
+    // if(data === null || data === undefined) {
+    //   return;
+    // }
+    // 아래 처럼 null 이 아니라는 조건을 체크 한다.
+    const result = data!.length;
+    return result;
+  }
+  ```
+- 결론은 타입 추론을 우선시하세요.
+
+## 6. type guard (타입가드: 타입 범위 좁히기)
+
+- 꼭 알아야 합니다.
+
+### 6.1. 타입 가드 개념
+
+- 여러 개의 타입이 지정된 경우 원하는 타입으로 좁히기
+- 샘플
+
+```ts
+function userJoin(input: number | string | boolean) {
+  // 타입가드 숫자(number)일 경우만 처리하겠다.
+  if (typeof input === "number") {
+    input.toFixed(2);
+    return;
+  }
+  // 타입가드 문자열(number)일 경우만 처리하겠다.
+  if (typeof input === "string") {
+    input.charAt(0);
+    return;
+  }
+}
+```
+
+### 6.2. 타입 가드 문법
+
+- typeof (데이터 종류를 문자열로 확인 후 처리)
+- instanceof (객체의 원본 종류를 확인 후 처리)
+- in (객체의 속성명을 확인 후 처리)
+
+### 6.3. typeof 연산자
+
+```ts
+typeof 10; // "number"
+typeof "hello"; // "string"
+typeof true; // "boolean"
+typeof []; // "object"
+typeof {}; // "object"
+typeof function () {}; // "function"
+```
+
+```ts
+function userJoin(input: number | string | boolean) {
+  // 타입가드 숫자(number)일 경우만 처리하겠다.
+  if (typeof input === "number") {
+    input.toFixed(2);
+    return;
+  }
+  // 타입가드 문자열(number)일 경우만 처리하겠다.
+  if (typeof input === "string") {
+    input.charAt(0);
+    return;
+  }
+}
+```
+
+### 6.4. instanceof 연산자
+
+- 대상이 프로토타입(prototype)에 소속되는지 확인
+- true/false
+
+```js
+// 생성자 함수 : 객체(인스턴스) 생성
+// 현재 js 문법이므로
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+const user = new Person("홍길동", 20);
+console.log(user instanceof Person); // true
+
+const hong = {name:"홍길동", 20};
+console.log(user instanceof Person); // false
+```
+
+```ts
+class Person {
+  name: string;
+  age: number;
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+}
+
+// 타입 가드를 적용해 보는 함수
+function showInstance(data: string | Person) {
+  // 타입 가드 Person 으로 만들어진 데이터일경우 처리
+  if (data instanceof Person) {
+    // 데이터 종류를 보고 처리한다.
+    return;
+  }
+}
+// 활용
+const user = new Person("홍길동", 20);
+
+showInstance("안녕");
+showInstance(user);
+```
+
+### 6.5. in 연산자
+
+- 객체의 속성명을 가지고 타입 가드 한다.
+- 특정 속성명 존재여부 true/false
+
+```ts
+const person = {
+  nickName: "홍길동",
+  age: 20,
+};
+console.log("nickName" in person); // true
+console.log("age" in person); // true
+console.log("job" in person); // false
+```
+
+```ts
+interface Person {
+  nickName: string;
+  age: number;
+}
+interface AI {
+  nickName: string;
+  gen: number;
+}
+// 어떤 인터페이스를 사용했는지에 따라서 타입 가드 적용
+function isPerson(who: Person | AI) {
+  // 타입 가드 역할 못함
+  if ("nickName" in who) {
+    // 공통적인 내용처리
+  }
+  //  타입 가드 역할 수행
+  if ("age" in who) {
+    // 공통적인 내용처리
+  }
+}
+```
+
+### 6.7. is 연산자를 이용한 타입가드 함수
+
+- 함수의 리턴을 할때 리턴 타입에 대해서 가드 처리
+- 주로 객체 유니언( | ) 타입 중 하나를 구분하는데 사용.
+
+```ts
+interface Person {
+  nickName: string;
+  age: number;
+}
+interface AI {
+  nickName: string;
+  gen: number;
+}
+// 어떤 인터페이스를 사용했는지에 따라서 타입 가드 적용
+function isPerson(who: Person | AI): who is Person {
+  return (who as Person).age !== undefined;
+}
+```
+
+- is 연산자는 who 매개변수가 Person 타입인지 체크한다.
+- Person 과 AI 타입의 값을 받고 Person 속성이 있는지 확인하고 속성이 있으면 Person 타입으로 인정
+
+### 6.8. 만약 속성명으로 구분할 수 없을 경우 타입 가드
+
+- in 으로 구분이 안된다.
+- 이런 경우는 값으로 구분할 수 밖에 없다.
+
+```js
+interface Person {
+  nickName: string;
+  age: number;
+  part: "사람";
+}
+interface AI {
+  nickName: string;
+  age: number;
+  part: "인공지능";
+}
+// 만약 속성으로 구분이 어려운 경우
+function isPerson(who: Person | AI) {
+  if (who.part === "사람") {
+    // 처리한다.
+  }
+}
+```
+
+## 7. Type Compatibility (타입 호환성)
+
+- 서로 다른 타입이 호환(포함) 되지는를 의미한다.
+- JS 라면 타입캐스팅(타입 업데이트);
+- 호환이 안되는 경우
+  ```ts
+  let a: string = "go";
+  let b: number = 10;
+  // 타입 호환 안됨.
+  a = b;
+  // 타입 호환 안됨.
+  b = a;
+  ```
+- 호환이 되는 경우
+  ```ts
+  let a: string = "go";
+  let b: string = "hello";
+  // 타입 호환됨.
+  a = b;
+  // 타입 호환됨.
+  b = a;
+  ```
+
+### 7.1. Structual Typing 규칙(구조적 타입)
+
+- 타입의 유형 보다는 실제로 담겨지는 데이터를 보고 호환을 결정.
+- 타입 종류보다는 값의 종류를 보고 호환을 결정.
+
+  ```ts
+  type User = {
+    name: string;
+  };
+  type Animal = {
+    name: string;
+  };
+  let a: User = { name: "hong" };
+  let b: Animal = { name: "댕댕이" };
+  // 데이터 종류 말고 데이터 값의 구조가 같냐?
+  // 같다면 호환이 된다.
+
+  // 다른 목적을 가지고 생성된 타입일지라도 구조가 같으면
+  // 호환
+  a = b;
+  b = a;
+  ```
+
+### 7.2. 호환이 가능한 조건
+
+- 조건 1: 서로 타입명은 다르더라도 속성명이 동일하면 된다.
+- 조건 2: 조건 1 만족 후 속성의 데이터 타입이 동일하면 된다.
+
+  ```ts
+  type User = {
+    name: string;
+  };
+  type Animal = {
+    name: string;
+  };
+  let a: User = { name: "hong" };
+  let b: Animal = { name: "댕댕이" };
+
+  a = b;
+  b = a;
+  ```
+
+- 동일한 타입을 가진 속성이 1 개라도 있다면 호환 가능
+
+  ```ts
+  type User = {
+    name: string;
+  };
+  type Animal = {
+    name: string;
+    skill: string;
+  };
+  let a: User = { name: "hong" };
+  let b: Animal = { name: "댕댕이", skill: "애교" };
+
+  // 동일한 타입을 가진 속성이 1 개라도 있다면 호환 가능
+  a = b;
+  ```
+
+- b 는 타입상 skill: string 이 없어서 에러
+
+  ```ts
+  type User = {
+    name: string;
+  };
+  type Animal = {
+    name: string;
+    skill: string;
+  };
+  let a: User = { name: "hong" };
+  let b: Animal = { name: "댕댕이", skill: "애교" };
+
+  // 예외적으로 아래처럼 진행이 되면 호환안됨.
+  // b 는 타입상 skill: string 이 없어서 에러
+  b = a;
+  ```
+
+- 타입 호환 오류가 발생시 처리가 필요하다면 아래처럼 진행
+  : 속성명과 속성 타입을 똑같이 맞추면 된다.
+  ```ts
+  type User = {
+    name: string;
+    skill: string;
+  };
+  type Animal = {
+    name: string;
+    skill: string;
+  };
+  ```
+  : 옵션(?) 을 속성에 준다. (필수조건에서 제외한 경우라서 조심)
+  ```ts
+  type User = {
+    name: string;
+  };
+  type Animal = {
+    name: string;
+    // 옵션으로 해결
+    skill?: string;
+  };
+  ```
+
+### 7.2. 호환이 가능한 함수
+
+- 함수도 구조가 중요함.
+- 기존 함수를 유지하는 것이 좋다.
+  ```ts
+  let say = function (txt: string): string {
+    return txt;
+  };
+  let hello = function (a: string): string {
+    return a;
+  };
+  say = hello;
+  hello = say;
+  ```
+- 주의 사항
+
+  ```ts
+  let say = function (txt: string): string {
+    return txt;
+  };
+  let hello = function (a: string, b: string): string {
+    return a + b;
+  };
+
+  // 에러가 발생한다.
+  // 매개변수의 기준을 생각해보자.
+  // 많으면 OK, 적으면 에러
+  say = hello;
+
+  hello = say;
+  ```
+
+### 7.3. 제네릭 타입의 호환
+
+- 제네릭으로 받은 타입이 해당 타입 구조에서 사용되었는가가 중요.
+
+  ```ts
+  interface What<T> {}
+
+  let a: What<string> = "";
+  let b: What<number> = 5;
+  // 호환이 된다.
+  a = b;
+  b = a;
+  ```
+
+  - 호환 안되는 경우
+
+  ```ts
+  interface What<T> {
+    data: T;
+  }
+  let a: What<string> = { data: "" };
+  // 만들어지는 인터페이스
+  // interface What {
+  // data: string;
+  // }
+
+  let b: What<number> = { data: 5 };
+  // 만들어지는 인터페이스
+  // interface What {
+  // data: number;
+  // }
+
+  // 호환이 안된다.
+  a = b;
+  b = a;
+  ```
+
+## 8. 유틸리티 타입
+
+- 이미 만들어진 타입의 구조를 고치지 않고 재사용하기
+- tsconfig.json 에서 셋팅
+- 유틸리티 기능들은 라이브러리가 제공
+  ```json
+  "compilerOptions": {
+    "lib": [
+            "ESNext"
+          ],
+  }
+  ```
+
+### 8.1. Pick
+
+- 특정 타입의 속성을 뽑아서 새로운 타입을 만들어 낼 때 사용.
+- 문법
+  : Pick<대상 타입, '대상 타입의 속성 이름' | '대상 타입의 속성 이름'>
+
+  ```ts
+  interface Profile {
+    id: string;
+    address: string;
+    name: string;
+  }
+  type Profiled = Pick<Profile, "id" | "name">;
+  var hong: Profiled = {
+    id: "hong",
+    name: "홍길동",
+  };
+  ```
+
+- 결가적으로 타입 별칭을 정의한 것과 같은 효과를 나타낸다.
+
+## 2. Omit
+
+- 특정 타입의 속성을 제외하고 나머지 속성으로 새로운 타입을 만들어 낼 때 사용.
+- 문법
+  : Omit<대상 타입, '대상 타입의 속성 이름' | '대상 타입의 속성 이름'>
+
+```ts
+interface Profile {
+  id: string;
+  address: string;
+  name: string;
+}
+type Profiled = Omit<Profile, "address" | "name">;
+var user: Profiled = {
+  id: "hong",
+};
+```
+
+- 결가적으로 타입 별칭을 정의한 것과 같은 효과를 나타낸다.
+
+## 3. Partial
+
+- 특정 타입의 모든 속성을 옵셔널 속성으로 변환한 새로운 타입을 만들어 낼 때 사용.
+- 문법
+  : Partial<대상 타입>
+
+```ts
+interface Profile {
+  id: string;
+  address: string;
+  name: string;
+}
+type Profiled = Partial<Profile>;
+var user: Profiled = {
+  id: "hong",
+};
+```
+
+- 결가적으로 타입 별칭을 정의한 것과 같은 효과를 나타낸다.
+
+## 4. Exclude
+
+- 특정 타입의 유니언 타입을 구성하는 특정 타입을 제외한 새로운 타입을 만들어 낼 때 사용.
+- Pick, Omit, Partial 타입이 모두 객체 타입의 형태를 변형하여 새로운 객체 타입을 만드는 반면 Exclude 타입은 유니언 타입을 변형한다.
+- 문법
+  : Exclude<대상 타입, "제거할 타입 이름 1" | "제거할 타입 이름 2">
+
+  ```ts
+  type Languages = "C" | "Java" | "TypeScript" | "React" | "JavaScript";
+  type TrueLanguages = Exclude<Languages, "React" | "JavaScript">;
+  ```
+
+- 결가적으로 타입 별칭을 정의한 것과 같은 효과를 나타낸다.
+
+## 5. Record
+
+- 타입 1개를 속성의 key로 받고, 다른 타입 1개를 value 로 받아 객체 타입으로 변환
+- 실제 값을 변경하는 것이 아니라 타입만 map() API 처럼 변환해 줌.
+- 문법
+  : Record<객체 속성의 키로 사용할 타입, 객체 속성의 값으로 사용할 타입>
+  : 첫번째 자리는 string, number, string 유니언, number 유니언 등
+  : 두번째 자리는 아무 타입이나
+
+  ```ts
+  interface Profile {
+    skill: string;
+    age: number;
+  }
+  type Who = "a" | "b" | "c";
+  type Heroes = Record<Who, Profile>;
+
+  // 만들어지는 타입
+  // type Heroes = {
+  //   a: Profile;
+  //   b: Profile;
+  //   c: Profile;
+  // }
+
+  var members: Heroes = {
+    a: { skill: "", age: 100 },
+    b: { skill: "", age: 100 },
+    c: { skill: "", age: 100 },
+  };
+  ```
+
+- 결가적으로 타입 별칭을 정의한 것과 같은 효과를 나타낸다.
+
+## 9. 맵드 타입
+
+- 내일 진행

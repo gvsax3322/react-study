@@ -12,4 +12,4 @@ const pair2: Pair<string> = { first: "a" };
 // }
 
 // 제약 조건에 의해 오류로 인식
-const pair3: Pair<boolean> = { first: true };
+// const pair3: Pair<boolean> = { first: true };
